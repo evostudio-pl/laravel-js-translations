@@ -29,7 +29,7 @@ class CacheCommand extends Command
      */
     public function handle()
     {
-        $this->call('translations:clear');
+        $this->call('js-translations:clear');
 
         Cache::rememberForever(
             JsTranslations::CACHE_KEY,

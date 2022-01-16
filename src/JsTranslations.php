@@ -3,7 +3,6 @@
 namespace EvoStudio\JsTranslations;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Lang;
 use SplFileInfo;
 
 class JsTranslations
@@ -27,7 +26,7 @@ class JsTranslations
 
     private static function phpTranslations($locale): array
     {
-        $dir = self::resourcePath("lang/$locale");
+        $dir = resource_path("lang/$locale");
 
         if (! self::isReadableDir($dir)) {
             return [];
@@ -37,14 +36,14 @@ class JsTranslations
             $key = ($translation = $file->getBasename('.php'));
 
             return [
-                $key => Lang::get($translation, [], $locale)
+                $key => trans($translation, [], $locale)
             ];
         })->toArray();
     }
 
     private static function jsonTranslations($locale): array
     {
-        $path = self::resourcePath("lang/$locale.json");
+        $path = resource_path("lang/$locale.json");
 
         if (is_string($path) && is_readable($path)) {
             return (array) json_decode(file_get_contents($path), true);
@@ -55,7 +54,7 @@ class JsTranslations
 
     private static function retrieveTranslationsLocales(): array
     {
-        $localesDir = self::resourcePath("lang");
+        $localesDir = resource_path("lang");
 
         if (! self::isReadableDir($localesDir)) {
             return [];
@@ -80,10 +79,5 @@ class JsTranslations
     private static function isReadableDir(string $path): bool
     {
         return is_dir($path) && is_readable($path);
-    }
-
-    private static function resourcePath(string $path = ''): string
-    {
-        return __DIR__ . '/../resources/lang' . $path;
     }
 }

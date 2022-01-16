@@ -2,6 +2,10 @@
 
 namespace EvoStudio\JsTranslations;
 
+use EvoStudio\JsTranslations\Commands\{
+    CacheCommand,
+    ClearCommand
+};
 use Illuminate\Support\Facades\{
     Blade,
     Cache
@@ -19,13 +23,21 @@ class JsTranslationsServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerBladeDirective();
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CacheCommand::class,
+                ClearCommand::class
+            ]);
+        }
     }
 
     protected function registerBladeDirective(): void
     {
-        $translations = json_encode(
-            Cache::get(JsTranslations::CACHE_KEY, JsTranslations::translations())
-        );
+        $translations = json_encode(Cache::get(
+            JsTranslations::CACHE_KEY,
+            JsTranslations::translations()
+        ));
 
         Blade::directive('translations', fn() =>
             <<<HTML
