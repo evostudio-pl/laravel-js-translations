@@ -21,7 +21,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "EvoStudio\\JsTranslations\\ServiceProvider"
+                "EvoStudio\\JsTranslations\\JsTranslationsServiceProvider"
             ],
             "aliases": {}
         }
