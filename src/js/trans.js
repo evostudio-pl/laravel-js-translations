@@ -2,7 +2,7 @@ export default function __(key, replace) {
     let translation, translationNotFound = true;
 
     try {
-        translation = key.split('.').reduce((t, i) => t[i] || null, Evo.translations[Evo.locale].php)
+        translation = key.split('.').reduce((t, i) => t[i] || null, JsTranslations.translations[JsTranslations.locale].php)
 
         if (translation) {
             translationNotFound = false
@@ -12,7 +12,7 @@ export default function __(key, replace) {
     }
 
     if (translationNotFound) {
-        let translationsList = (Evo.locale + '.json').split('.').reduce((p, c) => p && p[c] || null, Evo.translations);
+        let translationsList = (JsTranslations.locale + '.json').split('.').reduce((p, c) => p && p[c] || null, JsTranslations.translations);
 
         translation = typeof(translationsList) !== 'undefined' && typeof(translationsList[key]) !== 'undefined'
             ? translationsList[key]

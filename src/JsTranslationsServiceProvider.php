@@ -45,8 +45,8 @@ class JsTranslationsServiceProvider extends ServiceProvider
         Blade::directive('translations', fn() =>
             <<<HTML
                 <script type="text/javascript">
-                    const Evo = {
-                        locale: $appLocale;
+                    const JsTranslations = {
+                        locale: $appLocale,
                         translations: $translations
                     };
 
