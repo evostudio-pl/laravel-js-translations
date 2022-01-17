@@ -2,6 +2,7 @@
 
 namespace EvoStudio\JsTranslations\Commands;
 
+use EvoStudio\JsTranslations\JsTranslations;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
@@ -28,7 +29,7 @@ class ClearCommand extends Command
      */
     public function handle()
     {
-        Cache::forget('APP_TRANSLATIONS');
+        Cache::forget(JsTranslations::CACHE_KEY);
 
         $this->info('Translations cache cleared!');
     }
