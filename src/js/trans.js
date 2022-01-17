@@ -1,4 +1,4 @@
-export default function __(key, replace) {
+const __ = (key, replace) => {
     let translation, translationNotFound = true;
 
     try {

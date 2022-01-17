@@ -39,7 +39,7 @@ class JsTranslationsServiceProvider extends ServiceProvider
             JsTranslations::translations()
         ));
 
-        $appLocale = app()->getLocale();
+        $appLocale = json_encode(app()->getLocale());
         $transHelperFunction = $this->getTransHelperFunction();
 
         Blade::directive('translations', fn() =>
