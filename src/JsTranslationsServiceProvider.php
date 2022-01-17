@@ -6,11 +6,8 @@ use EvoStudio\JsTranslations\Commands\{
     CacheCommand,
     ClearCommand
 };
-use Illuminate\Support\Facades\{
-    Blade,
-    Cache
-};
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Compilers\BladeCompiler;
 
 class JsTranslationsServiceProvider extends ServiceProvider
 {
@@ -22,7 +19,13 @@ class JsTranslationsServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerBladeDirective();
+        if ($this->app->resolved('blade.compiler')) {
+            $this->registerDirective($this->app['blade.compiler']);
+        } else {
+            $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler) {
+                $this->registerDirective($bladeCompiler);
+            });
+        }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -32,37 +35,8 @@ class JsTranslationsServiceProvider extends ServiceProvider
         }
     }
 
-    protected function registerBladeDirective(): void
+    protected function registerDirective(BladeCompiler $bladeCompiler): void
     {
-        $translations = json_encode(Cache::get(
-            JsTranslations::CACHE_KEY,
-            JsTranslations::translations()
-        ));
-
-        $appLocale = json_encode(app()->getLocale());
-        $transHelperFunction = $this->getTransHelperFunction();
-
-        Blade::directive('translations', fn() =>
-            <<<HTML
-                <script type="text/javascript">
-                    const JsTranslations = {
-                        locale: $appLocale,
-                        translations: $translations
-                    };
-
-                    $transHelperFunction
-                </script>
-            HTML
-        );
-    }
-
-    private function getTransHelperFunction(): string|false
-    {
-        return file_get_contents($this->getTransHelperFunctionFilePath());
-    }
-
-    private function getTransHelperFunctionFilePath():string
-    {
-        return __DIR__ . '/js/trans.js';
+        $bladeCompiler->directive('translations', fn() => "<?php echo app('" . TranslationsDataGenerator::class . "')->generate(); ?>");
     }
 }
