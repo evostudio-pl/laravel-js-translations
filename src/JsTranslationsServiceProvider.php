@@ -37,6 +37,6 @@ class JsTranslationsServiceProvider extends ServiceProvider
 
     protected function registerDirective(BladeCompiler $bladeCompiler): void
     {
-        $bladeCompiler->directive('translations', fn() => "<?php echo app('" . TranslationsDataGenerator::class . "')->generate(); ?>");
+        $bladeCompiler->directive('translations', fn() => "<?php echo app('" . JsTranslationsDataGenerator::class . "')->generate(); ?>");
     }
 }
