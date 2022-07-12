@@ -1,4 +1,4 @@
-const __ = (key, replace) => {
+const __ = (key, replace, grammaticalType = 0) => {
     let translation, translationNotFound = true;
 
     try {
@@ -23,5 +23,16 @@ const __ = (key, replace) => {
         translation = translation.replace(':' + key, value);
     })
 
-    return translation;
+    let translationsArr = translation.split('|');
+
+    if (translationsArr.length <= 1) {
+        return translation;
+    }
+
+    var translationsGrammaticalTypes = [];
+    translationsArr.forEach((element, index) => {
+        translationsGrammaticalTypes[element.match(/[^{}]*(?=\})/g)[0]] = element.replace(/\{([0-9]+)\}/g, '');
+    });
+
+    return translationsGrammaticalTypes[grammaticalType];
 }
