@@ -9,7 +9,7 @@
             "email": "dawid.herrlein@evostudio.pl"
         }
     ],
-    "version": "1.1",
+    "version": "1.2",
     "require": {
         "laravel/framework": ">=8.0"
     },
